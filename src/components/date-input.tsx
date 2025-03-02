@@ -1,6 +1,7 @@
-import { MoveLeft, MoveRight } from "lucide-react";
 import { useAnimate } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { DateObject } from "../types/date";
+import { validateDate } from "../utils/validate-date";
 
 const keys = [
   { label: 1, value: "1" },
@@ -17,7 +18,11 @@ const keys = [
   { label: "->", value: "Enter" },
 ];
 
-export function DateInput() {
+export function DateInput({
+  handleEnter,
+}: {
+  handleEnter: (value: DateObject) => void;
+}) {
   const [value, setValue] = useState<string>("YYYY:MM:DD");
   const [displayScope, displayAnimate] = useAnimate();
   const [buttonScope, buttonAnimate] = useAnimate();
@@ -28,7 +33,10 @@ export function DateInput() {
     displayAnimate(
       displayScope.current,
       { x: [-1, 2, -4, 4, -4, 4, -4, 2, -1, 0] },
-      { duration: 0.3, times: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9] }
+      {
+        duration: 0.3,
+        times: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9],
+      },
     );
   }, [displayAnimate, displayScope]);
 
@@ -36,10 +44,14 @@ export function DateInput() {
     (key: string) => {
       if (keys.find((k) => k.value === key) === undefined) return;
 
+      if ("vibrate" in navigator) {
+        navigator.vibrate(40); // Short, subtle vibration (40ms)
+      }
+
       buttonAnimate(
         `[data-key="${key}"]`,
         { scale: [1, 0.9, 1.05, 0.98, 1] },
-        { duration: 0.2, times: [0, 0.2, 0.4, 0.8, 1] }
+        { duration: 0.2, times: [0, 0.2, 0.4, 0.8, 1] },
       );
 
       if (key === "Backspace") {
@@ -61,14 +73,19 @@ export function DateInput() {
           setValue(newDate.join(""));
         }
       } else if (key === "Enter") {
-        triggerDisplayShake();
+        const result = validateDate(value);
+        if (result) {
+          handleEnter(result);
+        } else {
+          triggerDisplayShake();
+        }
       } else {
         const index =
           value.indexOf("Y") !== -1
             ? value.indexOf("Y")
             : value.indexOf("M") !== -1
-            ? value.indexOf("M")
-            : value.indexOf("D");
+              ? value.indexOf("M")
+              : value.indexOf("D");
 
         if (index !== -1) {
           const newDate = value.split("");
@@ -77,14 +94,14 @@ export function DateInput() {
         }
       }
     },
-    [buttonAnimate, triggerDisplayShake, value]
+    [buttonAnimate, triggerDisplayShake, handleEnter, value],
   );
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (lastKeyPressed.current === event.key) return;
       const button = buttonScope.current?.querySelector(
-        `[data-key="${event.key}"]`
+        `[data-key="${event.key}"]`,
       ) as HTMLButtonElement;
       button?.setAttribute("data-active", "true");
       lastKeyPressed.current = event.key;
@@ -92,7 +109,7 @@ export function DateInput() {
 
     const handleKeyUp = (event: KeyboardEvent) => {
       const button = buttonScope.current?.querySelector(
-        `[data-key="${event.key}"]`
+        `[data-key="${event.key}"]`,
       ) as HTMLButtonElement;
       button?.setAttribute("data-active", "false");
       button?.click(); // Programmatically trigger click
@@ -106,14 +123,14 @@ export function DateInput() {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [handleKeyAction]);
+  }, [handleKeyAction, buttonScope]);
 
   return (
     <div className="w-3xs space-y-4">
       {/* Display area */}
       <div
         ref={displayScope}
-        className="h-14 text-2xl font-bold rounded-md flex justify-center items-center border-3 border-yellow bg-yellow/50 select-none"
+        className="border-yellow bg-yellow/50 flex h-14 items-center justify-center rounded-md border-3 text-2xl font-bold select-none"
       >
         {value.split("").map((char, index) => (
           <span
@@ -134,7 +151,7 @@ export function DateInput() {
           <button
             key={key.value}
             data-key={key.value}
-            className=" flex justify-center items-center outline-none select-none cursor-pointer border-3 font-bold text-2xl border-yellow  aspect-square text-center rounded-md bg-yellow/50 data-[active=true]:bg-yellow active:bg-yellow data-[active=true]:border-yellow/50 active:border-yellow/50 bg-clip-padding"
+            className="border-yellow bg-yellow/50 data-[active=true]:bg-yellow active:bg-yellow data-[active=true]:border-yellow/50 active:border-yellow/50 flex aspect-square cursor-pointer items-center justify-center rounded-md border-3 bg-clip-padding text-center text-2xl font-bold outline-none select-none"
             onClick={() => handleKeyAction(key.value)}
           >
             {key.label}
