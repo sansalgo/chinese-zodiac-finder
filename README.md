@@ -1,54 +1,76 @@
-# React + TypeScript + Vite
+# Chinese Zodiac Finder
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Chinese Zodiac Finder** is a web application that takes the user's date of birth and reveals their Chinese zodiac sign along with detailed characteristics like personality traits, compatibility, and lucky aspects. The app features a Chinese traditional-style interface with smooth animations.
 
-Currently, two official plugins are available:
+## Table of Contents
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [Introduction](#introduction)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [How to Run](#how-to-run)
+- [Screenshots](#screenshots)
+- [Live Demo](#live-demo)
+- [Contributing](#contributing)
+- [License](#license)
 
-## Expanding the ESLint configuration
+## Introduction
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+This project helps users discover their Chinese zodiac sign based on their date of birth and provides meaningful insights including personality traits, ideal matches, and lucky symbols. The app is designed with cultural aesthetics and interactive transitions for an immersive experience.
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## Features
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- Identify Chinese zodiac sign from birth date
+- View sign-specific characteristics:
+  - Personality Traits
+  - Best Matches & Least Compatible Signs
+  - Lucky Numbers, Colors, Flowers, and Directions
+- Smooth transitions and animations using Framer Motion
+- Traditional Chinese-style UI design
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Tech Stack
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+- **Frontend**: React, TailwindCSS
+- **Animations**: Framer Motion
+
+## How to Run
+
+1. Clone the repository:
+
+   ```bash
+   https://github.com/sansalgo/chinese-zodiac-finder.git
+   cd chinese-zodiac-finder
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   pnpm install
+   ```
+
+3. Start the development server:
+
+   ```bash
+   pnpm run dev
+   ```
+
+4. Open your browser and go to:
+
+   ```
+   http://localhost:5173
+   ```
+
+## Screenshots
+
+![Zodiac Finder Screenshot](screenshots/zodiac-ui.png)
+
+## Live Demo
+
+Explore the live version: [Chinese Zodiac Finder Live](https://chinese-zodiac-finder.netlify.app/)
+
+## Contributing
+
+Contributions and ideas are welcome! Please open an issue or submit a pull request to improve the project.
+
+## License
+
+This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.
